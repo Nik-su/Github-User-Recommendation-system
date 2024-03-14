@@ -4,11 +4,14 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
+import os
 
 def load_data_from_mongodb():
-    client = MongoClient("mongodb://localhost:27017/") 
-    db = client["github_users_file4"]  
-    collection = db["user_collection"]
+    uri = os.environ.get("MONGODB_URI")
+    client = MongoClient(uri, server_api=ServerApi('1')) 
+    db = client["Github_Profiles"]  
+    collection = db["User_Collection"]
     cursor = collection.find({}, {'_id': 0})
     data = list(cursor)
     client.close()
